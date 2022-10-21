@@ -2,7 +2,7 @@ resources:
   repositories:
     - repository: jhadrcSource
       type: github
-      endpoint: github.com_cwsgithubsvc
+      endpoint: Cloud-Web-Services
       name: Cloud-Web-Services/jhadrc-datacore-jh-edu
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
