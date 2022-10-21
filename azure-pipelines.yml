@@ -26,5 +26,5 @@ stages:
         targetType: 'inline'
         script: |
           echo "Source Branch: $(Build.SourceBranch)"
-    - checkout: govExBcaiSource
-      path: govExBcaiSource        
+    - checkout: jhadrcSource
+      path: jhadrcSource        
