@@ -4,7 +4,7 @@ resources:
       type: github
       endpoint: Cloud-Web-Services
       name: Cloud-Web-Services/jhadrc-datacore-jh-edu
-      ref: refs/heads/master
+      ref: refs/heads/main
       #ref: $(Build.SourceBranch)
       trigger:
         batch: true
