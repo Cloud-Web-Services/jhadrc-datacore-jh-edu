@@ -116,7 +116,7 @@ stages:
         appType: webApp
         SlotName: 'production'
         WebAppName: 'jhadrc-datacore'
-        DeploymentType: 'zipDeploy'
+        #DeploymentType: 'zipDeploy'
         Package: '$(Pipeline.Workspace)/**/*.zip'
          
 #    - task: AzureAppServiceSettings@1
