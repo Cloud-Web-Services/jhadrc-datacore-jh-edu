@@ -18,35 +18,26 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 variables:
 - name: isScheduled
   value: $[eq(variables['Build.Reason'], 'Schedule')]
+- name: buildConfiguration
+  value: 'Release'
 
 - group: jhadrc
 
-stages:
-- stage: source_check
-  displayName: Source Check
-  jobs:
-  - job: source_check
-    displayName: Source Check
-    pool: $(pool)
-    steps:
-    - task: Bash@3
-      displayName: 'Get Source Branch'
-      inputs:
-        targetType: 'inline'
-        script: |
-          echo "Source Branch: $(Build.SourceBranch)"
-    - checkout: jhadrcSource
-      path: jhadrcSource      
-
-pool:
-  vmImage: 'ubuntu-18.04' # examples of other options: 'macOS-10.15', 'windows-2019'
 
 steps:
+- task: Bash@3
+  displayName: 'Get Source Branch'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo "Source Branch: $(Build.SourceBranch)"
+- checkout: jhadrcSource
+  path: jhadrcSource      
+
 - task: UseDotNet@2
   inputs:
     version: '6.0.x'
 
-steps:
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK'
   inputs:
@@ -54,16 +45,6 @@ steps:
     performMultiLevelLookup: true
     includePreviewVersions: true # Required for preview versions
 
-trigger:
-- master
-
-pool:
-  vmImage: 'windows-latest'
-
-variables:
-  buildConfiguration: 'Release'
-
-steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
@@ -77,7 +58,6 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 
 # do this before your build tasks
-steps:
 - task: DotNetCoreCLI@2
   displayName: Restore
   inputs:
@@ -88,7 +68,6 @@ steps:
     externalFeedCredentials: <Name of the NuGet service connection>
 # ...
 
-steps:
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
@@ -96,7 +75,6 @@ steps:
     projects: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration)' # Update this to match your need
 
-steps:
 - task: DotNetCoreCLI@2
   displayName: 'Install dotnetsay'
   inputs:
@@ -104,7 +82,6 @@ steps:
     custom: tool
     arguments: 'install -g dotnetsay'
 
-steps:
 # ...
 # do this after other tasks such as building
 - task: DotNetCoreCLI@2
@@ -113,7 +90,6 @@ steps:
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-steps:
 # ...
 # do this after your tests have run
 - script: dotnet test <test-project> --logger trx
@@ -123,7 +99,6 @@ steps:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
 
-steps:
 # ...
 # do this after other tasks such as building
 - task: DotNetCoreCLI@2
@@ -132,7 +107,6 @@ steps:
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 
-steps:
 # ...
 # do this after your tests have run
 - script: dotnet test <test-project> --logger trx --collect "Code coverage"
@@ -166,7 +140,6 @@ steps:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'     
 
-steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
@@ -180,7 +153,6 @@ steps:
     targetPath: '$(Build.ArtifactStagingDirectory)' 
     artifactName: 'myWebsiteName'
 
-steps:
 # ...
 # do this near the end of your pipeline in most cases
 - script: dotnet pack /p:PackageVersion=$(version)  # define version variable elsewhere in your pipeline
@@ -195,7 +167,6 @@ steps:
     versioningScheme: byEnvVar
     versionEnvVar: version
 
-steps:
 # ...
 # do this after you've built your app, near the end of your pipeline in most cases
 # for example, you do this before you deploy to an Azure web app on Windows
