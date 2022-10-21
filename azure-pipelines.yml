@@ -2,15 +2,24 @@ resources:
   repositories:
     - repository: jhadrcSource
       type: github
-      endpoint: Cloud-Web-Services
+      endpoint: github.com_cwsgithubsvc
       name: Cloud-Web-Services/jhadrc-datacore-jh-edu
+      ref: refs/heads/master
+      #ref: $(Build.SourceBranch)
+      trigger:
+        batch: true
+        branches:
+          include:
+          - release/*
+          - main
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
 variables:
 - name: isScheduled
   value: $[eq(variables['Build.Reason'], 'Schedule')]
-- group: govexbcai
+
+- group: jhadrc
 
 stages:
 - stage: source_check
@@ -26,5 +35,5 @@ stages:
         targetType: 'inline'
         script: |
           echo "Source Branch: $(Build.SourceBranch)"
-    - checkout: jhadrcSource
-      path: jhadrcSource        
+    - checkout: govExBcaiSource
+      path: govExBcaiSource        
