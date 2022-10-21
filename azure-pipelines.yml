@@ -95,13 +95,13 @@ stages:
         artifactName: 'drop'
         downloadPath: '$(System.DefaultWorkingDirectory)'
 
-#    - task: AzureRmWebAppDeployment@4
-#      inputs:
-#        ConnectionType: 'AzureRM'
-#        azureSubscription: 'labAzureSubscription'
-#        appType: 'webApp'
-#        WebAppName: '$(WEBAPPNAME)'
-#        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'JH-CWS'
+        appType: 'webApp'
+        WebAppName: 'jhadrc-datacore'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 #    - task: AzureAppServiceSettings@1
 #      inputs:
