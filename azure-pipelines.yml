@@ -1,19 +1,30 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+resources:
+  repositories:
+    - repository: jhadrcSource
+      type: github
+      endpoint: github.com_cwsgithubsvc
+      name: Cloud-Web-Services/jhadrc-datacore-jh-edu
 
-trigger:
-- main
+name: $(Date:yyyyMMdd)$(Rev:.r)
 
-pool:
-  vmImage: ubuntu-latest
+variables:
+- name: isScheduled
+  value: $[eq(variables['Build.Reason'], 'Schedule')]
+- group: govexbcai
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: source_check
+  displayName: Source Check
+  jobs:
+  - job: source_check
+    displayName: Source Check
+    pool: $(pool)
+    steps:
+    - task: Bash@3
+      displayName: 'Get Source Branch'
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo "Source Branch: $(Build.SourceBranch)"
+    - checkout: govExBcaiSource
+      path: govExBcaiSource        
