@@ -96,14 +96,26 @@ stages:
         artifactName: 'drop'
         downloadPath: '$(Pipeline.Workspace)'
     
-    - task: AzureRmWebAppDeployment@4
+    - task: AzureWebApp@1
+      displayName: 'Deploy Azure Web App jhadrc-datacore'
       inputs:
-        ConnectionType: 'AzureRM'
         azureSubscription: 'JH-CWS'
-        appType: 'webApp'
-        #SlotName: 'production'
-        WebAppName: 'jhadrc-datacore'
-        packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+        appName: 'jhadrc-datacore'
+        package: '$(Pipeline.Workspace)/**/*.zip'
+        deployToSlotOrASE: true
+        slotName: production
+        
+#    - task: AzureRmWebAppDeployment@4
+#      inputs:
+#        ConnectionType: 'AzureRM'
+#        azureSubscription: 'JH-CWS'
+#        deployToSlotOrASE: true
+#        ResourceGroupName: 'JH-CWS-ALZHEIMERS-RG'
+#        appType: 'webApp'
+#        SlotName: 'production'
+#        WebAppName: 'jhadrc-datacore'
+#        DeploymentType: 'zipDeploy'
+#        packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
 
 #    - task: AzureAppServiceSettings@1
 #      inputs:
